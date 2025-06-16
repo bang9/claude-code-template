@@ -2,9 +2,9 @@ name: Deploy React App to GitHub Pages
 
 on:
   push:
-    branches: [ main, release/github-pages ]
+    branches: [ release/github-pages ]
   pull_request:
-    branches: [ main ]
+    branches: [ release/github-pages ]
 
 jobs:
   build-and-deploy:
