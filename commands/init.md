@@ -163,11 +163,11 @@ For selected servers:
 3. **Step-by-Step Installation**: Install one by one to prevent errors
 4. **Post-Installation Verification**: Confirm installation success with `claude mcp list`
 
-#### Web Development Related MCP Servers (Officially Verified)
-- **browserbase**: Cloud browser automation
-- **github**: GitHub repository management
-- **cloudflare**: Cloudflare resource management
-- **playwright**: E2E testing (generally already installed)
+#### Recommended MCP Servers (React + TypeScript Projects)
+- **playwright**: Browser automation and E2E testing (already installed)
+- **context7**: Library documentation context provider (already installed)
+- **github**: GitHub repository management (optional)
+- **postgres**: Database operations (if needed)
 
 ### 5. Sample Interaction Flow
 <!-- LOCALIZATION: All interaction prompts should be in user's language -->
@@ -263,12 +263,12 @@ const detectLanguage = (userInput) => {
 const responseLanguage = detectLanguage(firstUserMessage);
 ```
 
-참고: MCP 서버 정보는 `claude mcp list` 명령어로 실시간 확인하므로 별도 저장하지 않음
+Note: MCP server information is checked in real-time via `claude mcp list` command, so no separate storage needed
 
-### 7. CLAUDE.md 생성
-템플릿을 사용하여 프로젝트별 CLAUDE.md 생성:
-- `.claude/templates/claude.md.template` 읽기
-- project.json 설정값으로 템플릿 변수 치환:
+### 7. CLAUDE.md Generation
+Generate project-specific CLAUDE.md using template:
+- Read `.claude/templates/claude.md.template`
+- Replace template variables with project.json configuration values:
   - `{{PROJECT_NAME}}` → projectName
   - `{{LANGUAGE_PLATFORM}}` → languagePlatform  
   - `{{DEV_COMMAND}}` → commands.dev
@@ -277,11 +277,11 @@ const responseLanguage = detectLanguage(firstUserMessage);
   - `{{LINT_COMMAND}}` → commands.lint
   - `{{FORMAT_COMMAND}}` → commands.format
   - `{{INSTALL_COMMAND}}` → commands.install
-- 루트 디렉토리에 CLAUDE.md 생성
+- Generate CLAUDE.md in root directory
 
-#### 템플릿 변수 매핑
+#### Template Variable Mapping
 ```javascript
-// 템플릿 처리 로직 예시
+// Template processing logic
 const templateVars = {
   PROJECT_NAME: config.projectName,
   LANGUAGE_PLATFORM: config.languagePlatform,
@@ -295,38 +295,37 @@ const templateVars = {
 };
 ```
 
-### 8. 프로젝트별 커맨드 생성
-템플릿을 사용하여 프로젝트별로 최적화된 커맨드들을 생성:
+### 8. Command Generation from Templates
+Generate project-specific commands using template system:
 
-#### Command Template Processing
+#### Process Command Templates
 ```bash
-# Process each command template with project.json configuration
-for template in .claude/templates/commands/*.template; do
-    command_name=$(basename "$template" .template)
-    # Replace template variables with actual values and generate in .claude/commands/
-    process_template "$template" > ".claude/commands/$command_name"
-done
+# Process work.md.template with project.json configuration
+read_template ".claude/templates/commands/work.md.template"
+apply_template_variables "$template_content" "$templateVars"
+write_command ".claude/commands/work.md" "$processed_content"
 ```
 
-#### Generated Commands
-- **complete.md** - {{LANGUAGE_PLATFORM}} optimized completion process
-- **test.md** - Reflects actual commands like {{TEST_COMMAND}}, {{LINT_COMMAND}}
-- **work.md** - {{LANGUAGE_PLATFORM}}-specific issue templates and branch rules
-- **status.md** - Status checking based on {{PROJECT_NAME}} and project configuration
-- **prd.md** - Includes {{LANGUAGE_PLATFORM}} tech stack information
-
-#### 커맨드별 템플릿 변수 적용 예시:
+#### Template Processing Logic
 ```javascript
-// complete.md 템플릿 처리 예시
-const completeTemplate = {
-  PROJECT_NAME: "poc-fursys-aiagent",
-  LANGUAGE_PLATFORM: "JavaScript/React + TypeScript", 
-  TEST_COMMAND: "pnpm test",
-  LINT_COMMAND: "pnpm run lint",
-  FORMAT_COMMAND: "prettier --write .",
-  BUILD_COMMAND: "pnpm run build",
-  TYPE_CHECK_COMMAND: "tsc --noEmit"
-};
+// Generate work command from template
+const workTemplate = readFile('.claude/templates/commands/work.md.template');
+const processedWorkCommand = workTemplate
+  .replace(/{{PROJECT_NAME}}/g, config.projectName)
+  .replace(/{{LANGUAGE_PLATFORM}}/g, config.languagePlatform)
+  .replace(/{{DEV_COMMAND}}/g, config.commands.dev)
+  .replace(/{{BUILD_COMMAND}}/g, config.commands.build)
+  .replace(/{{TEST_COMMAND}}/g, config.commands.test)
+  .replace(/{{LINT_COMMAND}}/g, config.commands.lint)
+  .replace(/{{FORMAT_COMMAND}}/g, config.commands.format);
+
+writeFile('.claude/commands/work.md', processedWorkCommand);
+```
+
+#### Generated Commands Structure
+```
+.claude/commands/
+└── work.md              # Project-optimized unified work management
 ```
 
 ### 9. Directory Structure Check/Creation
@@ -350,39 +349,39 @@ Provide following information after initialization completion:
 ```
 ✅ {{PROJECT_NAME}} ({{LANGUAGE_PLATFORM}}) initialization completed! # LOCALIZE: Completion header
 
-📁 생성된 파일:
-- .claude/config/project.json (프로젝트 설정)
-- CLAUDE.md (AI Agent 작업 가이드)
-- .claude/commands/*.md (프로젝트별 최적화된 커맨드들)
+📁 Created files: # LOCALIZE: Created files header
+- .claude/config/project.json (Project configuration) # LOCALIZE: File descriptions
+- CLAUDE.md (AI Agent work guide)
+- .claude/work/ (Work documents directory)
 
-🛠️ 설정된 {{LANGUAGE_PLATFORM}} 명령어:
-- 개발/실행: {{DEV_COMMAND}}
-{{#if BUILD_COMMAND}}- 빌드/컴파일: {{BUILD_COMMAND}}{{/if}}
-{{#if TEST_COMMAND}}- 테스트: {{TEST_COMMAND}}{{/if}}
-{{#if LINT_COMMAND}}- 코드 검증: {{LINT_COMMAND}}{{/if}}
-{{#if FORMAT_COMMAND}}- 포맷팅: {{FORMAT_COMMAND}}{{/if}}
-{{#if TYPE_CHECK_COMMAND}}- 타입 체크: {{TYPE_CHECK_COMMAND}}{{/if}}
+🛠️ Configured {{LANGUAGE_PLATFORM}} commands: # LOCALIZE: Commands header
+- Development/execution: {{DEV_COMMAND}} # LOCALIZE: Command descriptions
+{{#if BUILD_COMMAND}}- Build/compile: {{BUILD_COMMAND}}{{/if}}
+{{#if TEST_COMMAND}}- Testing: {{TEST_COMMAND}}{{/if}}
+{{#if LINT_COMMAND}}- Code validation: {{LINT_COMMAND}}{{/if}}
+{{#if FORMAT_COMMAND}}- Formatting: {{FORMAT_COMMAND}}{{/if}}
+{{#if TYPE_CHECK_COMMAND}}- Type checking: {{TYPE_CHECK_COMMAND}}{{/if}}
 
-📋 생성된 통합 워크 커맨드:
-- /work start "description" - {{LANGUAGE_PLATFORM}} 최적화된 작업 시작
-- /work - 스마트 컨텍스트 기반 액션 (상태 확인/제안)
-- /work done - 품질 검사 후 자동 커밋/PR
-- /work list - {{PROJECT_NAME}} 전체 작업 상태 확인
-- /work help - 상세한 사용법 및 도움말
+📋 Generated unified work commands: # LOCALIZE: Work commands header
+- /work start "description" - {{LANGUAGE_PLATFORM}} optimized work initiation # LOCALIZE: Command descriptions
+- /work - Smart context-based action (status check/suggestions)
+- /work done - Quality checks with automatic commit/PR
+- /work list - {{PROJECT_NAME}} complete work status overview
+- /work help - Detailed usage and help guide
 
-🔧 설치된 MCP 서버:
-(실제 설치된 서버 목록 표시)
-MCP 서버 확인: claude mcp list
+🔧 Installed MCP servers: # LOCALIZE: MCP servers header
+(Display actual installed server list) # LOCALIZE: Server list description
+Check MCP servers: claude mcp list # LOCALIZE: Check command description
 
-🚀 다음 단계:
-1. /work help 로 사용법 확인
-2. /work start "첫 번째 작업 설명" 로 첫 작업 시작  
-3. /work list 로 작업 상태 확인
-4. 설정 변경: .claude/config/project.json 수정
-5. MCP 서버 관리: claude mcp list/add/remove
-6. 상세 가이드: CLAUDE.md 참고
+🚀 Next steps: # LOCALIZE: Next steps header
+1. Check usage with /work help # LOCALIZE: Step descriptions
+2. Start first work with /work start "first work description"
+3. Check work status with /work list
+4. Modify settings: .claude/config/project.json
+5. Manage MCP servers: claude mcp list/add/remove
+6. Detailed guide: CLAUDE.md reference
 
-💡 모든 커맨드가 {{LANGUAGE_PLATFORM}} 환경에 최적화되었습니다!
+💡 All commands are optimized for {{LANGUAGE_PLATFORM}} environment! # LOCALIZE: Optimization message
 ```
 
 ## Error Handling
