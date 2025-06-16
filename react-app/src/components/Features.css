@@ -1,0 +1,143 @@
+.features {
+  padding: 4rem 0;
+  background: #ffffff;
+}
+
+.dark .features {
+  background: #2c3e50;
+}
+
+.features-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.features-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.dark .features-header h2 {
+  color: #ecf0f1;
+}
+
+.features-header p {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.dark .features-header p {
+  color: #bdc3c7;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.dark .feature-card {
+  background: #34495e;
+  border-color: #4a5f7a;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.dark .feature-card:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.feature-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.dark .feature-title {
+  color: #ecf0f1;
+}
+
+.feature-description {
+  font-size: 1rem;
+  color: #5a6c7d;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.dark .feature-description {
+  color: #bdc3c7;
+}
+
+.feature-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-items li {
+  padding: 0.5rem 0;
+  color: #667eea;
+  font-weight: 500;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.dark .feature-items li {
+  color: #74b9ff;
+}
+
+.feature-items li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #27ae60;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .feature-card {
+    padding: 1.5rem;
+  }
+  
+  .features-header h2 {
+    font-size: 2rem;
+  }
+}

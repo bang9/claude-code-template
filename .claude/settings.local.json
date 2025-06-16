@@ -3,7 +3,14 @@
     "allow": [
       "Bash(find:*)",
       "Bash(ls:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(claude mcp:*)",
+      "Bash(mkdir:*)",
+      "Bash(rm:*)",
+      "Bash(pnpm create vite:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm run:*)"
     ],
     "deny": []
   }

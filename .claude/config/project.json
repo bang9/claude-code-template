@@ -1,0 +1,23 @@
+{
+  "projectName": "claude-code-template",
+  "languagePlatform": "etc",
+  "commands": {
+    "dev": "none",
+    "build": "none",
+    "test": "none",
+    "lint": "none",
+    "format": "none",
+    "install": "none"
+  },
+  "features": {
+    "hasBuilds": false,
+    "hasFormatting": false,
+    "hasInstallStep": false
+  },
+  "metadata": {
+    "description": "claude-code template",
+    "createdAt": "2025-06-16",
+    "version": "1.0.0",
+    "language": "ko"
+  }
+}
