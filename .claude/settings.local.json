@@ -11,6 +11,7 @@
       "Bash(rm:*)",
       "Bash(pnpm create vite:*)",
       "Bash(pnpm install:*)",
+      "Bash(pnpm run:*)",
       "Bash(pnpm run:*)"
     ],
     "deny": []
