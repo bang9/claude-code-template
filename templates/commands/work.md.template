@@ -1,0 +1,524 @@
+# Work Management: $ARGUMENTS
+
+<!--
+SYSTEM INSTRUCTION: This template handles the unified work management system.
+LANGUAGE DETECTION: Detect user language from input and generate appropriate responses.
+USER CONTENT LOCALIZATION: All user prompts, work descriptions, and status messages in user's language.
+TECHNICAL ELEMENTS: Keep git commands, file paths, branch names, and technical references in English.
+TONE: Professional and helpful tone suitable for the detected language.
+-->
+
+Unified work management system for {{PROJECT_NAME}} project.
+
+## Usage
+<!-- LOCALIZATION: Usage descriptions should be in user's language -->
+- `/work start "work description"` - Start new work
+- `/work` - Smart context-aware action (status check/suggestions)
+- `/work done` - Complete current work
+- `/work list` - Show all work items and their status
+- `/work help [subcommand]` - Show detailed help
+
+## Work Management Process
+
+### 1. Work Start (`/work start`)
+
+#### Interactive Work Creation
+<!-- LOCALIZATION: All interactive prompts should be in user's language -->
+```
+🚀 {{PROJECT_NAME}} - Start New Work # LOCALIZE: New work header
+
+Work description: [user input] # LOCALIZE: Description prompt
+Priority (high/medium/low): [user input] # LOCALIZE: Priority prompt
+Estimated time: [user input] # LOCALIZE: Time estimate prompt
+```
+
+#### Automatic Work ID Generation
+<!-- TECHNICAL: Keep file operations in English -->
+```bash
+# Check existing work files and assign next number
+ls .claude/work/WORK-*.md | wc -l
+# Generate new work number as result + 1 (e.g., WORK-003)
+```
+
+#### Complexity Assessment and Work Document Creation
+<!-- LOCALIZATION: Assessment questions should be in user's language -->
+Automatically determine work complexity and generate appropriate document:
+
+**Simple Work Criteria:**
+- Single file modification
+- UI/styling changes
+- Bug fixes
+- Documentation updates
+
+**Complex Work Criteria:**
+- Multiple file modifications
+- New feature implementation
+- Architecture changes
+- API integrations
+
+#### Git Branch Creation
+<!-- TECHNICAL: Keep branch naming in English for team compatibility -->
+```bash
+# Generate branch name based on work ID and description
+BRANCH_NAME="feature/WORK-XXX-brief-description"
+
+# Create and switch to new branch
+git checkout main
+git pull origin main
+git checkout -b $BRANCH_NAME
+
+echo "🌿 New branch created: $BRANCH_NAME" # LOCALIZE: Branch creation message
+```
+
+#### Work Document Template
+Generate `.claude/work/WORK-XXX.md` file using the following template structure:
+
+##### Simple Work Template:
+```markdown
+# WORK-{{WORK_ID}}: {{TITLE}}
+
+## Basic Information
+- Status: {{STATUS}}
+- Priority: {{PRIORITY}}
+- Estimated Time: {{ESTIMATED_TIME}}
+- Branch: {{BRANCH_NAME}}
+- Created: {{CURRENT_DATE}}
+
+## Work Description
+{{DESCRIPTION}}
+
+## Related Files
+{{RELATED_FILES}}
+
+## Completion Criteria
+- [ ] {{COMPLETION_CRITERIA_1}}
+- [ ] {{COMPLETION_CRITERIA_2}}
+{{#if TEST_COMMAND}}- [ ] Tests passed: {{TEST_COMMAND}}{{/if}}
+{{#if LINT_COMMAND}}- [ ] Code quality verified: {{LINT_COMMAND}}{{/if}}
+{{#if BUILD_COMMAND}}- [ ] Build successful: {{BUILD_COMMAND}}{{/if}}
+```
+
+##### Complex Work Template:
+```markdown
+# WORK-{{WORK_ID}}: {{TITLE}}
+
+## 1. Basic Information
+- Status: {{STATUS}}
+- Priority: {{PRIORITY}}
+- Estimated Time: {{ESTIMATED_TIME}}
+- Branch: {{BRANCH_NAME}}
+- Created: {{CURRENT_DATE}}
+
+## 2. Background and Purpose
+### Current Situation
+{{CURRENT_SITUATION}}
+
+### Problem to Solve
+{{PROBLEM_DESCRIPTION}}
+
+### Expected Benefits
+{{EXPECTED_BENEFITS}}
+
+## 3. Functional Requirements
+### 3.1 Core Features
+{{CORE_FEATURES}}
+
+### 3.2 Additional Features
+{{ADDITIONAL_FEATURES}}
+
+## 4. Technical Requirements
+### 4.1 {{LANGUAGE_PLATFORM}} Stack
+- **Platform**: {{LANGUAGE_PLATFORM}}
+{{#if DEV_COMMAND}}- **Development**: {{DEV_COMMAND}}{{/if}}
+{{#if BUILD_COMMAND}}- **Build**: {{BUILD_COMMAND}}{{/if}}
+{{#if TEST_COMMAND}}- **Testing**: {{TEST_COMMAND}}{{/if}}
+{{#if LINT_COMMAND}}- **Linting**: {{LINT_COMMAND}}{{/if}}
+{{#if FORMAT_COMMAND}}- **Formatting**: {{FORMAT_COMMAND}}{{/if}}
+
+### 4.2 Performance Requirements
+{{PERFORMANCE_REQUIREMENTS}}
+
+### 4.3 Compatibility Requirements
+{{COMPATIBILITY_REQUIREMENTS}}
+
+## 5. UI/UX Requirements
+{{UI_UX_REQUIREMENTS}}
+
+## 6. Test Plan
+### 6.1 Unit Testing
+{{#if TEST_COMMAND}}
+```bash
+{{TEST_COMMAND}}
+```
+{{/if}}
+
+### 6.2 Integration Testing
+{{INTEGRATION_TEST_PLAN}}
+
+### 6.3 E2E Test Scenarios
+{{E2E_TEST_SCENARIOS}}
+
+## 7. Security Considerations
+{{SECURITY_CONSIDERATIONS}}
+
+## 8. Data Models
+{{DATA_MODELS}}
+
+## 9. Definition of Done
+- [ ] All functional requirements implemented
+{{#if TEST_COMMAND}}- [ ] Unit tests passed: {{TEST_COMMAND}}{{/if}}
+{{#if LINT_COMMAND}}- [ ] Code quality verified: {{LINT_COMMAND}}{{/if}}
+{{#if FORMAT_COMMAND}}- [ ] Formatting applied: {{FORMAT_COMMAND}}{{/if}}
+{{#if BUILD_COMMAND}}- [ ] Build successful: {{BUILD_COMMAND}}{{/if}}
+- [ ] Code review approved
+- [ ] Documentation updated
+
+## 10. Risk Factors and Mitigation
+### 10.1 Technical Risks
+{{TECHNICAL_RISKS}}
+
+### 10.2 Schedule Risks
+{{SCHEDULE_RISKS}}
+
+## 11. Change History
+- **v1.0**: {{CURRENT_DATE}} - Initial work plan created
+```
+
+### 2. Smart Context Action (`/work`)
+
+#### Current Work Detection
+<!-- LOCALIZATION: Status messages should be in user's language -->
+```bash
+# Detect current branch and extract work ID
+CURRENT_BRANCH=$(git branch --show-current)
+
+if [[ $CURRENT_BRANCH =~ WORK-([0-9]+) ]]; then
+    WORK_ID="${BASH_REMATCH[1]}"
+    echo "📋 Current work: WORK-$WORK_ID" # LOCALIZE: Current work message
+else
+    echo "💡 No active work detected. Use /work start to begin." # LOCALIZE: No work message
+fi
+```
+
+#### Context-Aware Actions
+<!-- LOCALIZATION: All suggestions should be in user's language -->
+Based on current state, provide appropriate suggestions:
+
+**When no work is active:**
+```
+💡 Start new work: /work start "description" # LOCALIZE: Suggestions
+📋 View all work: /work list
+🔍 Get help: /work help
+```
+
+**When work is in progress:**
+```
+📊 Current Work Status: # LOCALIZE: Status header
+- Work: WORK-XXX - [title]
+- Branch: [branch name]
+- Status: [status]
+
+🛠️ Next Actions: # LOCALIZE: Actions header
+- Continue development: {{DEV_COMMAND}}
+- Run tests: {{TEST_COMMAND}}
+- Complete work: /work done
+```
+
+**When work is ready for completion:**
+```
+✅ Work appears ready for completion # LOCALIZE: Ready message
+- Modified files: X
+- Uncommitted changes: Y
+
+🚀 Ready to complete? /work done # LOCALIZE: Completion prompt
+```
+
+### 3. Work Completion (`/work done`)
+
+#### Current Work Detection
+```bash
+# Extract work ID from current branch
+CURRENT_BRANCH=$(git branch --show-current)
+WORK_ID=$(echo $CURRENT_BRANCH | grep -o 'WORK-[0-9]\+')
+
+if [ -z "$WORK_ID" ]; then
+    echo "❌ No active work detected on current branch" # LOCALIZE: Error message
+    exit 1
+fi
+```
+
+#### Quality Checks
+<!-- LOCALIZATION: Progress messages should be in user's language -->
+Execute based on project configuration:
+
+{{#if FORMAT_COMMAND}}
+```bash
+echo "🎨 Code formatting..." # LOCALIZE: Format progress message
+{{FORMAT_COMMAND}}
+```
+{{/if}}
+
+{{#if LINT_COMMAND}}
+```bash
+echo "🔍 Code validation..." # LOCALIZE: Validation progress message
+{{LINT_COMMAND}}
+```
+{{/if}}
+
+{{#if TEST_COMMAND}}
+```bash
+echo "🧪 Test execution..." # LOCALIZE: Test progress message
+{{TEST_COMMAND}}
+```
+{{/if}}
+
+{{#if BUILD_COMMAND}}
+```bash
+echo "🏗️ Build validation..." # LOCALIZE: Build progress message
+{{BUILD_COMMAND}}
+```
+{{/if}}
+
+#### Commit Creation
+<!-- LOCALIZATION: Progress messages in user's language, commit message in English -->
+```bash
+# Stage changes
+git add .
+
+# Generate conventional commit message (TECHNICAL: Keep in English for team collaboration)
+COMMIT_TYPE=$(determine_commit_type)  # feat, fix, refactor, style, docs
+SCOPE=$(extract_scope_from_work)      # dashboard, auth, ui, etc.
+DESCRIPTION=$(extract_description_from_work)
+
+git commit -m "${COMMIT_TYPE}(${SCOPE}): ${DESCRIPTION}"
+```
+
+#### Work Document Update
+```bash
+# Update work status to completed
+sed -i 's/Status: in_progress/Status: completed/' ".claude/work/$WORK_ID.md"
+echo "- **Completed**: $(date) - Work finished and committed" >> ".claude/work/$WORK_ID.md"
+```
+
+#### PR Creation (Optional)
+```bash
+# Push to remote branch
+git push -u origin $(git branch --show-current)
+
+# Create PR with conventional title
+gh pr create --title "$(git log -1 --format=%s)" --body "$(cat <<'EOF'
+## Summary
+Work completed for $WORK_ID.
+
+## Quality Checks
+{{#if FORMAT_COMMAND}}- [x] Code formatting completed{{/if}}
+{{#if LINT_COMMAND}}- [x] Lint checks passed{{/if}}
+{{#if TEST_COMMAND}}- [x] Tests passed{{/if}}
+{{#if BUILD_COMMAND}}- [x] Build successful{{/if}}
+
+## Test Plan
+- [x] Basic functionality verification completed
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+EOF
+)"
+```
+
+### 4. Work List (`/work list`)
+
+#### Work Status Summary
+<!-- LOCALIZATION: All status information should be in user's language -->
+```bash
+echo "📋 {{PROJECT_NAME}} - Work Status" # LOCALIZE: Status header
+
+# Count work items by status
+TOTAL=$(ls .claude/work/WORK-*.md 2>/dev/null | wc -l)
+PENDING=$(grep -l "Status: pending" .claude/work/WORK-*.md 2>/dev/null | wc -l)
+IN_PROGRESS=$(grep -l "Status: in_progress" .claude/work/WORK-*.md 2>/dev/null | wc -l)
+COMPLETED=$(grep -l "Status: completed" .claude/work/WORK-*.md 2>/dev/null | wc -l)
+
+echo "Total Work Items: $TOTAL" # LOCALIZE: Count descriptions
+echo "├── 🔄 In Progress: $IN_PROGRESS"
+echo "├── ⏸️ Pending: $PENDING"
+echo "└── ✅ Completed: $COMPLETED"
+```
+
+#### Detailed Work List
+<!-- LOCALIZATION: Work list descriptions should be in user's language -->
+```bash
+echo "" # LOCALIZE: Work list header
+echo "📋 Work List:" # LOCALIZE: List header
+
+# List work items by priority
+for priority in high medium low; do
+    echo "🔴 High Priority:" # LOCALIZE: Priority headers
+    grep -l "Priority: $priority" .claude/work/WORK-*.md 2>/dev/null | while read file; do
+        WORK_ID=$(basename "$file" .md)
+        TITLE=$(grep "^# " "$file" | head -1 | sed 's/^# [^:]*: //')
+        STATUS=$(grep "Status: " "$file" | head -1 | sed 's/.*Status: //')
+        echo "- $WORK_ID [$STATUS] $TITLE" # LOCALIZE: Work descriptions
+    done
+done
+```
+
+#### Current Work Highlight
+<!-- LOCALIZATION: Current work info should be in user's language -->
+```bash
+CURRENT_BRANCH=$(git branch --show-current)
+if [[ $CURRENT_BRANCH =~ WORK-([0-9]+) ]]; then
+    echo "" # LOCALIZE: Current work header
+    echo "🔄 Current Active Work:" # LOCALIZE: Active work header
+    echo "- Branch: $CURRENT_BRANCH"
+    echo "- Work: WORK-${BASH_REMATCH[1]}"
+fi
+```
+
+### 5. Help System (`/work help`)
+
+#### General Help
+<!-- LOCALIZATION: All help content should be in user's language -->
+When called without arguments, show comprehensive usage:
+
+```
+🛠️ {{PROJECT_NAME}} Work Management System # LOCALIZE: Help header
+
+📋 Available Commands: # LOCALIZE: Commands header
+/work start "description" - Start new work # LOCALIZE: Command descriptions
+/work                     - Smart context action
+/work done               - Complete current work
+/work list               - Show all work items
+/work help [command]     - Show detailed help
+
+🚀 Quick Start: # LOCALIZE: Quick start header
+1. /work start "your task description"
+2. [do your development work]
+3. /work done
+
+💡 Tips: # LOCALIZE: Tips header
+- Use descriptive work titles
+- Check /work list to see all work items
+- /work provides context-aware suggestions
+```
+
+#### Command-Specific Help
+<!-- LOCALIZATION: Detailed help should be in user's language -->
+When called with a subcommand, show detailed usage:
+
+```bash
+case "$1" in
+    "start")
+        echo "📝 /work start - Create New Work" # LOCALIZE: Help sections
+        echo "Usage: /work start \"work description\""
+        echo "Examples:"
+        echo "  /work start \"Fix login button styling\""
+        echo "  /work start \"Implement user dashboard performance improvements\""
+        ;;
+    "done")
+        echo "✅ /work done - Complete Current Work"
+        echo "Automatically detects current work from git branch"
+        echo "Runs quality checks and creates commit"
+        ;;
+    # ... other commands
+esac
+```
+
+## Automatic Complexity Detection Logic
+
+```javascript
+function determineComplexity(description) {
+    const complexKeywords = [
+        'system', 'architecture', 'integration', 'api', 'database',
+        'authentication', 'performance', 'optimization', 'refactor',
+        'implement', 'create new', 'build', 'develop'
+    ];
+    
+    const simpleKeywords = [
+        'fix', 'update', 'change', 'modify', 'adjust', 'correct',
+        'style', 'color', 'text', 'button', 'link', 'typo'
+    ];
+    
+    const words = description.toLowerCase().split(' ');
+    
+    const complexScore = words.filter(word => 
+        complexKeywords.some(keyword => word.includes(keyword))
+    ).length;
+    
+    const simpleScore = words.filter(word => 
+        simpleKeywords.some(keyword => word.includes(keyword))
+    ).length;
+    
+    // Determine complexity based on scores and description length
+    if (complexScore > simpleScore || words.length > 10) {
+        return 'complex';
+    }
+    return 'simple';
+}
+```
+
+## Commit Type Detection Logic
+
+```javascript
+function determineCommitType(workDescription, changedFiles) {
+    // Analyze work description and changed files
+    const description = workDescription.toLowerCase();
+    
+    if (description.includes('fix') || description.includes('bug')) {
+        return 'fix';
+    }
+    
+    if (description.includes('refactor') || description.includes('restructure')) {
+        return 'refactor';
+    }
+    
+    if (description.includes('style') || description.includes('css') || 
+        changedFiles.some(file => file.includes('.css') || file.includes('style'))) {
+        return 'style';
+    }
+    
+    if (description.includes('doc') || 
+        changedFiles.some(file => file.includes('.md') || file.includes('readme'))) {
+        return 'docs';
+    }
+    
+    // Default to feat for new features/improvements
+    return 'feat';
+}
+```
+
+## Error Handling
+
+### Git Related Errors
+<!-- LOCALIZATION: Error descriptions should be in user's language -->
+- Branch name conflicts: Automatically add numbers (-1, -2)
+- Uncommitted changes: Recommend stash before proceeding
+- Network errors: Create local branch only, push later
+
+### Work Management Errors
+<!-- LOCALIZATION: Error solutions should be in user's language -->
+- Work number duplication: Automatically assign next number
+- File creation failure: Guide permission checking
+- Invalid work state: Provide clear next steps
+
+## Integration with {{LANGUAGE_PLATFORM}} Project
+
+### Project-Specific Features
+<!-- LOCALIZATION: Feature descriptions can be in user's language -->
+- **Command Integration**: Uses actual project commands from project.json
+- **Quality Automation**: Automatic formatting, linting, testing based on available tools
+- **Build Validation**: Include build verification when {{BUILD_COMMAND}} is available
+- **Type Checking**: Include TypeScript validation when available
+
+### Performance Optimization
+<!-- LOCALIZATION: Optimization descriptions can be in user's language -->
+- **Fast Operations**: Minimize file I/O and git operations
+- **Smart Caching**: Cache work status and branch information
+- **Batch Operations**: Group related git operations together
+
+## Related Commands Integration
+<!-- LOCALIZATION: Integration descriptions should be in user's language -->
+This unified work system replaces and integrates functionality from:
+- Previous `/project:work` command
+- Previous `/project:prd` command  
+- Previous `/project:complete` command
+- Previous `/project:status` command
+- Previous `/project:test` command (integrated into /work done)

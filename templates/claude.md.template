@@ -1,0 +1,197 @@
+# CLAUDE.md - {{PROJECT_NAME}} AI Agent Work Guide
+
+<!--
+SYSTEM INSTRUCTION: This template generates user-facing content in the user's detected language.
+LANGUAGE DETECTION: Analyze user input patterns to detect preferred language (Korean, English, Japanese, Chinese).
+USER CONTENT LOCALIZATION: All user-facing text (descriptions, messages, prompts) should be generated in user's language.
+TECHNICAL ELEMENTS: Keep technical commands, file paths, and code elements in English for consistency.
+TONE: Use professional, business-appropriate tone suitable for the detected language.
+-->
+
+## Project Information
+- **Project Name**: {{PROJECT_NAME}}
+- **Language/Platform**: {{LANGUAGE_PLATFORM}}
+- **Development Command**: `{{DEV_COMMAND}}`
+{{#if BUILD_COMMAND}}- **Build/Compile**: `{{BUILD_COMMAND}}`{{/if}}
+{{#if TEST_COMMAND}}- **Testing**: `{{TEST_COMMAND}}`{{/if}}
+{{#if LINT_COMMAND}}- **Code Validation**: `{{LINT_COMMAND}}`{{/if}}
+{{#if FORMAT_COMMAND}}- **Formatting**: `{{FORMAT_COMMAND}}`{{/if}}
+{{#if INSTALL_COMMAND}}- **Dependencies**: `{{INSTALL_COMMAND}}`{{/if}}
+
+## AI Agent Workflow
+
+### 1. Unified Work Management
+- Single `/work` command for all work management
+- Automatic complexity assessment and document generation
+- Smart context-aware actions based on current state
+- Streamlined workflow: start → develop → complete
+
+### 2. Intelligent Work Documentation
+- Simple tasks: Basic work info with completion criteria
+- Complex tasks: Comprehensive specifications (PRD-level detail)
+- Automatic template selection based on work complexity
+- Real-time work status tracking
+
+### 3. Quality-First Development
+- Automated code formatting, linting, and testing
+- Conventional commit message generation
+- Branch-based work isolation for parallel development
+- Integrated PR creation with quality checks
+
+### 4. Seamless Completion
+- One-command work completion with full validation
+- Automatic work status updates and documentation
+- Smart commit message generation based on changes
+- Optional PR creation with comprehensive summaries
+
+## Custom Slash Commands
+
+<!-- LOCALIZATION: Command descriptions and purposes should be displayed in user's language -->
+
+### Work Management Commands
+
+#### `/work start "work description"`
+**Purpose**: Start new work
+- Create work document (simple or complex based on assessment)
+- Generate work branch automatically
+- Set up development environment
+- Begin tracking work progress
+
+#### `/work`
+**Purpose**: Smart context-aware action
+- Check current work status when work is active
+- Provide next action suggestions
+- Show work progress and completion readiness
+- Guide user through workflow
+
+#### `/work done`
+**Purpose**: Complete current work
+- Automatic work detection from current branch
+- Run quality checks (formatting, linting, testing, building)
+- Generate conventional commit message
+- Update work status and create PR
+
+#### `/work list`
+**Purpose**: Show all work items
+- Display work status summary (pending, in progress, completed)
+- List work items by priority
+- Highlight current active work
+- Show completion rates and statistics
+
+#### `/work help [subcommand]`
+**Purpose**: Show comprehensive help
+- Display all available commands and usage
+- Provide command-specific detailed help
+- Show quick start guide and tips
+- Explain workflow and best practices
+
+### Work Automation Rules
+
+#### Commit Message Format
+<!-- TECHNICAL: Keep commit format in English for team collaboration -->
+Follows Conventional Commits standard with simple, clean messages:
+```
+<type>(<scope>): <description>
+
+# Examples:
+feat(dashboard): improve loading performance
+fix(auth): resolve login redirect issue
+style(ui): update button colors to match brand
+refactor(api): simplify user data handling
+```
+
+#### Automated Checklist
+<!-- LOCALIZATION: Checklist descriptions should be in user's language -->
+Automatic verification upon work completion:
+{{#if FORMAT_COMMAND}}- [ ] Code formatting applied: `{{FORMAT_COMMAND}}`{{/if}}
+{{#if LINT_COMMAND}}- [ ] Code validation passed: `{{LINT_COMMAND}}`{{/if}}
+{{#if TEST_COMMAND}}- [ ] Tests passed: `{{TEST_COMMAND}}`{{/if}}
+{{#if BUILD_COMMAND}}- [ ] Build/compilation successful: `{{BUILD_COMMAND}}`{{/if}}
+- [ ] Feature requirements implementation completed
+- [ ] Code review preparation completed
+
+## Available Tools
+
+<!-- LOCALIZATION: Tool descriptions and comments should be in user's language -->
+
+### CLI Tools
+```bash
+# Development and execution
+{{#if INSTALL_COMMAND}}{{INSTALL_COMMAND}}        # Install dependencies{{/if}}
+{{DEV_COMMAND}}           # Development/execution
+{{#if BUILD_COMMAND}}{{BUILD_COMMAND}}         # Build/compile{{/if}}
+
+# Quality checks
+{{#if FORMAT_COMMAND}}{{FORMAT_COMMAND}}        # Code formatting{{/if}}
+{{#if LINT_COMMAND}}{{LINT_COMMAND}}          # Code validation/linting{{/if}}
+{{#if TEST_COMMAND}}{{TEST_COMMAND}}          # Test execution{{/if}}
+
+# Git operations
+git status           # Check status
+git diff             # Check changes
+```
+
+### MCP Servers
+Check currently installed MCP servers: `claude mcp list`
+
+MCP server management commands:
+- **List check**: `claude mcp list`
+- **Add server**: `claude mcp add <name> <command>`
+- **Remove server**: `claude mcp remove <name>`
+- **Status check**: `/mcp` command within Claude
+
+## Project Structure
+
+<!-- LOCALIZATION: Directory descriptions should be in user's language -->
+
+### Unified Work Management
+```
+.claude/
+├── commands/          # Custom slash commands
+├── config/           # Project configuration
+│   └── project.json
+├── templates/        # Document templates
+│   ├── claude.md.template
+│   └── commands/
+│       └── work.md.template
+└── work/             # Work documents (replaces issues/ and prd/)
+    ├── WORK-001.md   # Simple or complex work documents
+    ├── WORK-002.md   # Automatically generated based on complexity
+    └── WORK-003.md   # Contains both work info and specifications
+```
+
+## Work Principles
+
+### Code Development Rules
+1. **Prefer Existing Files**: Modify existing files rather than creating new ones
+2. **Minimal Changes**: Perform only the requested work accurately
+3. **Quality Assurance**: Run tests and validation for all changes
+4. **Security Compliance**: Never commit sensitive information or keys
+
+### Communication Principles
+1. **Clear Communication**: Ask immediately for unclear requirements
+2. **Step-by-step Progress**: Confirm complex tasks in stages
+3. **Result Reporting**: Summarize results and changes upon completion
+
+### Smart Language Response Guidelines
+<!-- SYSTEM: Advanced language detection and hybrid localization strategy -->
+
+**Automatic Language Detection and Response:**
+- **Auto-detect user language** from first input patterns (Korean, English, Japanese, Chinese)
+- **User-facing content**: Generate in detected language (issue descriptions, status reports, dialogs)
+- **Technical elements**: Keep in English (commands, file paths, branch names, commit messages)
+- **Professional tone**: Use business-appropriate tone for detected language
+- **Fallback**: Default to English if detection uncertain
+- **Team collaboration**: Technical identifiers remain English for international compatibility
+
+**Hybrid Localization Strategy:**
+- **English system prompts**: For optimal AI performance
+- **Localized user content**: For better user experience
+- **Safe technical naming**: Branch names, file names in English
+- **Cultural adaptation**: Appropriate formality level per language
+
+{{#if ADDITIONAL_NOTES}}
+## Additional Notes
+<!-- LOCALIZATION: Additional notes should be in user's language -->
+{{ADDITIONAL_NOTES}}
+{{/if}}
