@@ -396,3 +396,6 @@ When existing configuration exists:
 - Display current configuration
 - Confirm overwrite
 - Provide partial update options
+
+## AFTER Initialization
+Remove `.claude/commands/init.md` after successful initialization to prevent re-initialization.
