@@ -60,7 +60,7 @@ Automatically determine work complexity and generate appropriate document:
 <!-- TECHNICAL: Keep branch naming in English for team compatibility -->
 ```bash
 # Generate branch name based on work ID and description
-BRANCH_NAME="feature/WORK-XXX-brief-description"
+BRANCH_NAME="feat/WORK-XXX-brief-description"
 
 # Create and switch to new branch
 git checkout main
@@ -431,22 +431,22 @@ function determineComplexity(description) {
         'authentication', 'performance', 'optimization', 'refactor',
         'implement', 'create new', 'build', 'develop'
     ];
-    
+
     const simpleKeywords = [
         'fix', 'update', 'change', 'modify', 'adjust', 'correct',
         'style', 'color', 'text', 'button', 'link', 'typo'
     ];
-    
+
     const words = description.toLowerCase().split(' ');
-    
-    const complexScore = words.filter(word => 
+
+    const complexScore = words.filter(word =>
         complexKeywords.some(keyword => word.includes(keyword))
     ).length;
-    
-    const simpleScore = words.filter(word => 
+
+    const simpleScore = words.filter(word =>
         simpleKeywords.some(keyword => word.includes(keyword))
     ).length;
-    
+
     // Determine complexity based on scores and description length
     if (complexScore > simpleScore || words.length > 10) {
         return 'complex';
@@ -461,25 +461,25 @@ function determineComplexity(description) {
 function determineCommitType(workDescription, changedFiles) {
     // Analyze work description and changed files
     const description = workDescription.toLowerCase();
-    
+
     if (description.includes('fix') || description.includes('bug')) {
         return 'fix';
     }
-    
+
     if (description.includes('refactor') || description.includes('restructure')) {
         return 'refactor';
     }
-    
-    if (description.includes('style') || description.includes('css') || 
+
+    if (description.includes('style') || description.includes('css') ||
         changedFiles.some(file => file.includes('.css') || file.includes('style'))) {
         return 'style';
     }
-    
-    if (description.includes('doc') || 
+
+    if (description.includes('doc') ||
         changedFiles.some(file => file.includes('.md') || file.includes('readme'))) {
         return 'docs';
     }
-    
+
     // Default to feat for new features/improvements
     return 'feat';
 }
@@ -518,7 +518,7 @@ function determineCommitType(workDescription, changedFiles) {
 <!-- LOCALIZATION: Integration descriptions should be in user's language -->
 This unified work system replaces and integrates functionality from:
 - Previous `/project:work` command
-- Previous `/project:prd` command  
+- Previous `/project:prd` command
 - Previous `/project:complete` command
 - Previous `/project:status` command
 - Previous `/project:test` command (integrated into /work done)
